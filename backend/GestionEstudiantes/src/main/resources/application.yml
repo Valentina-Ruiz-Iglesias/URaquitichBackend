@@ -1,0 +1,16 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: GestionEstudiantes
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/students_db
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
