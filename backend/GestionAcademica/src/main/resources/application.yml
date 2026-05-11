@@ -6,7 +6,7 @@ spring:
     name: GestionAcademica
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5435/db_academica
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver

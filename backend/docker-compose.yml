@@ -1,19 +1,44 @@
 services:
-  # Base de datos PostgreSQL
-  postgres-db:
+
+  postgres-autenticacion:
     image: postgres:15-alpine
-    container_name: postgres-all
+    container_name: postgres-autenticacion
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: db_autenticacion
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
       - "5433:5432"
     volumes:
-      - pg_data_persistence:/var/lib/postgresql/data
+      - pg_data_autenticacion:/var/lib/postgresql/data
     restart: always
 
-  # Interfaz gráfica para ver la base de datos
+  postgres-estudiantes:
+    image: postgres:15-alpine
+    container_name: postgres-estudiantes
+    environment:
+      POSTGRES_DB: db_estudiantes
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5434:5432"
+    volumes:
+      - pg_data_estudiantes:/var/lib/postgresql/data
+    restart: always
+
+  postgres-academica:
+    image: postgres:15-alpine
+    container_name: postgres-academica
+    environment:
+      POSTGRES_DB: db_academica
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5435:5432"
+    volumes:
+      - pg_data_academica:/var/lib/postgresql/data
+    restart: always
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin-ui
@@ -22,7 +47,13 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
+    depends_on:
+      - postgres-autenticacion
+      - postgres-estudiantes
+      - postgres-academica
     restart: always
 
 volumes:
-  pg_data_persistence:
+  pg_data_autenticacion:
+  pg_data_estudiantes:
+  pg_data_academica:
