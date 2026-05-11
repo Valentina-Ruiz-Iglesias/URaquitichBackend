@@ -49,22 +49,38 @@ public class AuthService {
             throw new RuntimeException("El correo electrónico ya está en uso");
         }
 
-        Role defaultRole = roleRepository.findByName(RoleName.ROLE_ESTUDIANTE)
-                .orElseGet(() -> roleRepository.save(new Role(RoleName.ROLE_ESTUDIANTE)));
+        // Asignar rol dinámico o por defecto (arreglado para ser effectively final)
+        final RoleName roleName;
+        String requestedRole = request.getRole();
+        
+        if (requestedRole != null && !requestedRole.isBlank()) {
+            RoleName foundRole;
+            try {
+                foundRole = RoleName.valueOf(requestedRole.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                foundRole = RoleName.ROLE_ESTUDIANTE;
+            }
+            roleName = foundRole;
+        } else {
+            roleName = RoleName.ROLE_ESTUDIANTE;
+        }
+
+        Role userRole = roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEnabled(true);
-        user.setRoles(Set.of(defaultRole));
+        user.setRoles(Set.of(userRole));
 
         userRepository.save(user);
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
 
-        return new AuthResponse(token, user.getUsername(), defaultRole.getName().name());
+        return new AuthResponse(token, user.getUsername(), userRole.getName().name());
     }
 
     public AuthResponse login(LoginRequest request) {
