@@ -1,6 +1,7 @@
 package com.raquitich.auth.service;
 
 import com.raquitich.auth.dto.AuthResponse;
+import com.raquitich.auth.dto.InternalCreateUserRequest;
 import com.raquitich.auth.dto.LoginRequest;
 import com.raquitich.auth.dto.RegisterRequest;
 import com.raquitich.auth.model.Role;
@@ -42,28 +43,16 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("El nombre de usuario ya está en uso");
+            throw new RuntimeException("Credenciales inválidas");
         }
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("El correo electrónico ya está en uso");
+            throw new RuntimeException("Credenciales inválidas");
         }
 
-        // Asignar rol dinámico o por defecto (arreglado para ser effectively final)
-        final RoleName roleName;
-        String requestedRole = request.getRole();
-        
-        if (requestedRole != null && !requestedRole.isBlank()) {
-            RoleName foundRole;
-            try {
-                foundRole = RoleName.valueOf(requestedRole.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                foundRole = RoleName.ROLE_ESTUDIANTE;
-            }
-            roleName = foundRole;
-        } else {
-            roleName = RoleName.ROLE_ESTUDIANTE;
-        }
+        // Todo usuario nuevo siempre recibe ROLE_ESTUDIANTE
+        // La asignación de otros roles es exclusiva de endpoints administrativos protegidos
+        final RoleName roleName = RoleName.ROLE_ESTUDIANTE;
 
         Role userRole = roleRepository.findByName(roleName)
                 .orElseGet(() -> roleRepository.save(new Role(roleName)));
@@ -71,6 +60,7 @@ public class AuthService {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
+        user.setNombre(request.getNombre());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEnabled(true);
         user.setRoles(Set.of(userRole));
@@ -81,6 +71,42 @@ public class AuthService {
         String token = jwtService.generateToken(userDetails);
 
         return new AuthResponse(token, user.getUsername(), userRole.getName().name());
+    }
+
+    /**
+     * Crea un usuario desde un microservicio interno (ej: GestionEstudiantes).
+     * NO devuelve token: el usuario deberá hacer login luego desde el frontend.
+     */
+    public void createInternalUser(InternalCreateUserRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("El username ya está en uso");
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("El email ya está en uso");
+        }
+
+        RoleName roleName = RoleName.ROLE_ESTUDIANTE;
+        if (request.getRole() != null && !request.getRole().isBlank()) {
+            try {
+                roleName = RoleName.valueOf(request.getRole());
+            } catch (IllegalArgumentException ignored) {
+                // rol desconocido → se asigna ROLE_ESTUDIANTE por defecto
+            }
+        }
+
+        final RoleName finalRoleName = roleName;   // final para usarla en la lambda
+        Role userRole = roleRepository.findByName(finalRoleName)
+                .orElseGet(() -> roleRepository.save(new Role(finalRoleName)));
+
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setNombre(request.getNombre());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEnabled(true);
+        user.setRoles(Set.of(userRole));
+
+        userRepository.save(user);
     }
 
     public AuthResponse login(LoginRequest request) {

@@ -28,8 +28,10 @@ spring:
 
 app:
   jwt:
-    secret: raquitich_super_secret_key_jwt_2026_raquitich_backend
+    secret: cmFxdWl0aWNoX3N1cGVyX3NlY3JldF9rZXlfand0XzIwMjZfcmFxdWl0aWNoX2JhY2tlbmQ=
     expiration: 86400000
+  internal:
+    api-key: raquitich-internal-secret-2026
 
 management:
   endpoints:
@@ -39,10 +41,9 @@ management:
 
   endpoint:
     health:
-      show-details: always
+      show-details: when-authorized
 
 logging:
   level:
-    org.springframework.security: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN

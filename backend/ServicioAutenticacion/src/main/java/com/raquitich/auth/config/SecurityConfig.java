@@ -52,9 +52,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/login",
-                                "/auth/register",
-                                "/actuator/health"
+                                "/actuator/health",
+                                "/internal/**"   // protegido por API key interna, no JWT
                         ).permitAll()
+
+                        .requestMatchers("/auth/register").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
@@ -86,7 +88,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean
