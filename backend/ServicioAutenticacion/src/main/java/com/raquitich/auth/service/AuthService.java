@@ -70,7 +70,7 @@ public class AuthService {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
 
-        return new AuthResponse(token, user.getUsername(), userRole.getName().name());
+        return new AuthResponse(token, user.getUsername(), user.getNombre(), userRole.getName().name());
     }
 
     /**
@@ -110,15 +110,17 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
+        // Soporta login con username O con correo electrónico
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseGet(() -> userRepository.findByEmail(request.getUsername())
+                        .orElseThrow(() -> new RuntimeException("Credenciales inválidas")));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
+                        user.getUsername(),
                         request.getPassword()
                 )
         );
-
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
@@ -129,6 +131,6 @@ public class AuthService {
                 .map(r -> r.getName().name())
                 .orElse("ROLE_ESTUDIANTE");
 
-        return new AuthResponse(token, user.getUsername(), role);
+        return new AuthResponse(token, user.getUsername(), user.getNombre(), role);
     }
 }
