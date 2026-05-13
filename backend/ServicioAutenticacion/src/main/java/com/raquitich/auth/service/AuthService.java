@@ -9,8 +9,6 @@ import com.raquitich.auth.model.RoleName;
 import com.raquitich.auth.model.User;
 import com.raquitich.auth.repository.RoleRepository;
 import com.raquitich.auth.repository.UserRepository;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,20 +22,17 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService customUserDetailsService;
 
     public AuthService(UserRepository userRepository,
                        RoleRepository roleRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
-                       AuthenticationManager authenticationManager,
                        CustomUserDetailsService customUserDetailsService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -110,17 +105,19 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        // Soporta login con username O con correo electrónico
+        // Busca por username o por correo electrónico
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseGet(() -> userRepository.findByEmail(request.getUsername())
                         .orElseThrow(() -> new RuntimeException("Credenciales inválidas")));
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getUsername(),
-                        request.getPassword()
-                )
-        );
+        // Verifica la contraseña directamente — sin pasar por Spring Security
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Credenciales inválidas");
+        }
+
+        if (!user.isEnabled()) {
+            throw new RuntimeException("La cuenta está desactivada");
+        }
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
