@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "5433:5432"
+      - "6433:5432"
     volumes:
       - pg_data_autenticacion:/var/lib/postgresql/data
     restart: always
@@ -21,7 +21,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "5434:5432"
+      - "6434:5432"
     volumes:
       - pg_data_estudiantes:/var/lib/postgresql/data
     restart: always
@@ -34,7 +34,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "5435:5432"
+      - "6435:5432"
     volumes:
       - pg_data_academica:/var/lib/postgresql/data
     restart: always

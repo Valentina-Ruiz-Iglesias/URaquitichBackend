@@ -117,7 +117,7 @@ public class AuthService {
                 )
         );
 
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByUsernameOrEmail(request.getUsername(), request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
