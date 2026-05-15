@@ -39,6 +39,19 @@ services:
       - pg_data_academica:/var/lib/postgresql/data
     restart: always
 
+  postgres-observaciones:
+    image: postgres:15-alpine
+    container_name: postgres-observaciones
+    environment:
+      POSTGRES_DB: db_observaciones
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_data_observaciones:/var/lib/postgresql/data
+    restart: always
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin-ui
@@ -51,9 +64,11 @@ services:
       - postgres-autenticacion
       - postgres-estudiantes
       - postgres-academica
+      - postgres-observaciones
     restart: always
 
 volumes:
   pg_data_autenticacion:
   pg_data_estudiantes:
   pg_data_academica:
+  pg_data_observaciones:

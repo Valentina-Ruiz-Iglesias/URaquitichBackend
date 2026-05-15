@@ -28,6 +28,7 @@
         <module>ServicioAutenticacion</module>
         <module>GestionEstudiantes</module>
         <module>GestionAcademica</module>
+        <module>ObservacionesSeguimiento</module>
     </modules>
 
     
