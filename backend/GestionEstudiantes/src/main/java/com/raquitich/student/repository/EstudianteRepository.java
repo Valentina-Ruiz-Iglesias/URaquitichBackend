@@ -12,6 +12,7 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
 
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
+    boolean existsByRut(String rut);
     boolean existsByNumeroMatricula(String numeroMatricula);
 
     Optional<Estudiante> findByUsername(String username);

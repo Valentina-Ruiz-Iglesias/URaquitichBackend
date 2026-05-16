@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "6433:5432"
+      - "5433:5432"
     volumes:
       - pg_data_autenticacion:/var/lib/postgresql/data
     restart: always
@@ -21,7 +21,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "6434:5432"
+      - "5434:5432"
     volumes:
       - pg_data_estudiantes:/var/lib/postgresql/data
     restart: always
@@ -34,9 +34,22 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "6435:5432"
+      - "5435:5432"
     volumes:
       - pg_data_academica:/var/lib/postgresql/data
+    restart: always
+
+  postgres-observaciones:
+    image: postgres:15-alpine
+    container_name: postgres-observaciones
+    environment:
+      POSTGRES_DB: db_observaciones
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_data_observaciones:/var/lib/postgresql/data
     restart: always
 
   pgadmin:
@@ -51,9 +64,11 @@ services:
       - postgres-autenticacion
       - postgres-estudiantes
       - postgres-academica
+      - postgres-observaciones
     restart: always
 
 volumes:
   pg_data_autenticacion:
   pg_data_estudiantes:
   pg_data_academica:
+  pg_data_observaciones:

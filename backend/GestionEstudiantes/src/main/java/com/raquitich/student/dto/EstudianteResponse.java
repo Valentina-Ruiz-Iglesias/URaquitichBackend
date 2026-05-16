@@ -9,6 +9,7 @@ public class EstudianteResponse {
 
     private Long id;
     private String username;
+    private String rut;
     private String email;
     private String nombre;
     private LocalDate fechaNacimiento;
@@ -21,6 +22,7 @@ public class EstudianteResponse {
     public EstudianteResponse(Estudiante e) {
         this.id              = e.getId();
         this.username        = e.getUsername();
+        this.rut             = e.getRut();
         this.email           = e.getEmail();
         this.nombre          = e.getNombre();
         this.fechaNacimiento = e.getFechaNacimiento();
@@ -35,6 +37,7 @@ public class EstudianteResponse {
 
     public Long getId() { return id; }
     public String getUsername() { return username; }
+    public String getRut() { return rut; }
     public String getEmail() { return email; }
     public String getNombre() { return nombre; }
     public LocalDate getFechaNacimiento() { return fechaNacimiento; }

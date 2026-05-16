@@ -13,7 +13,10 @@ public class Estudiante {
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String username;          // mismo username que en ServicioAutenticacion
+    private String username;
+
+    @Column(unique = true, length = 12)
+    private String rut;               // RUT chileno, ej: 12345678-9
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;
@@ -50,6 +53,9 @@ public class Estudiante {
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
+    public String getRut() { return rut; }
+    public void setRut(String rut) { this.rut = rut; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
