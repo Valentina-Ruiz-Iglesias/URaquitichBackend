@@ -1,0 +1,25 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: CalendarioEventos
+  datasource:
+    url: jdbc:postgresql://localhost:5437/db_calendario
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: cmFxdWl0aWNoX3N1cGVyX3NlY3JldF9rZXlfand0XzIwMjZfcmFxdWl0aWNoX2JhY2tlbmQ=
+
+logging:
+  level:
+    com.raquitich: DEBUG

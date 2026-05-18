@@ -7,6 +7,7 @@ import com.raquitich.observaciones.repository.ObservacionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -48,12 +49,20 @@ public class ObservacionService {
         }
 
         Observacion obs = new Observacion();
-        obs.setEstudianteUsername(request.getEstudianteUsername());
+        obs.setEstudianteUsername(request.getEstudianteUsername().trim());
         obs.setDocenteUsername(docenteUsername);
         obs.setTipo(request.getTipo().toUpperCase());
         obs.setTitulo(request.getTitulo());
         obs.setContenido(request.getContenido());
-        obs.setFechaObservacion(request.getFechaObservacion());
+
+        // Parsear fecha solo si viene informada y no está vacía
+        if (request.getFechaObservacion() != null && !request.getFechaObservacion().isBlank()) {
+            try {
+                obs.setFechaObservacion(LocalDate.parse(request.getFechaObservacion()));
+            } catch (Exception e) {
+                // Fecha inválida → se guarda sin fecha
+            }
+        }
 
         return ObservacionResponse.from(repository.save(obs));
     }

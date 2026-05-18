@@ -2,9 +2,6 @@ package com.raquitich.observaciones.dto;
 
 import com.raquitich.observaciones.model.Observacion;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 public class ObservacionResponse {
 
     private Long id;
@@ -13,19 +10,21 @@ public class ObservacionResponse {
     private String tipo;
     private String titulo;
     private String contenido;
-    private LocalDate fechaObservacion;
-    private LocalDateTime creadoEn;
+    private String fechaObservacion;   // String para evitar problemas de serialización Jackson
+    private String creadoEn;
 
     public static ObservacionResponse from(Observacion obs) {
         ObservacionResponse r = new ObservacionResponse();
-        r.id                   = obs.getId();
-        r.estudianteUsername   = obs.getEstudianteUsername();
-        r.docenteUsername      = obs.getDocenteUsername();
-        r.tipo                 = obs.getTipo();
-        r.titulo               = obs.getTitulo();
-        r.contenido            = obs.getContenido();
-        r.fechaObservacion     = obs.getFechaObservacion();
-        r.creadoEn             = obs.getCreadoEn();
+        r.id                  = obs.getId();
+        r.estudianteUsername  = obs.getEstudianteUsername();
+        r.docenteUsername     = obs.getDocenteUsername();
+        r.tipo                = obs.getTipo();
+        r.titulo              = obs.getTitulo();
+        r.contenido           = obs.getContenido();
+        r.fechaObservacion    = obs.getFechaObservacion() != null
+                                ? obs.getFechaObservacion().toString() : null;
+        r.creadoEn            = obs.getCreadoEn() != null
+                                ? obs.getCreadoEn().toString() : null;
         return r;
     }
 
@@ -35,6 +34,6 @@ public class ObservacionResponse {
     public String getTipo() { return tipo; }
     public String getTitulo() { return titulo; }
     public String getContenido() { return contenido; }
-    public LocalDate getFechaObservacion() { return fechaObservacion; }
-    public LocalDateTime getCreadoEn() { return creadoEn; }
+    public String getFechaObservacion() { return fechaObservacion; }
+    public String getCreadoEn() { return creadoEn; }
 }

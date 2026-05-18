@@ -32,6 +32,24 @@ public class SeccionService {
         return seccionRepo.findAll().stream().map(SeccionResponse::from).toList();
     }
 
+    /** Devuelve las secciones activas en las que el estudiante está inscrito */
+    @Transactional(readOnly = true)
+    public List<SeccionResponse> seccionesDelEstudiante(String username) {
+        return inscripcionRepo.findByEstudianteUsername(username).stream()
+                .filter(i -> i.isActiva())
+                .map(i -> SeccionResponse.from(i.getSeccion()))
+                .toList();
+    }
+
+    /** Devuelve las secciones activas que el docente tiene asignadas */
+    @Transactional(readOnly = true)
+    public List<SeccionResponse> seccionesDelDocente(String username) {
+        return seccionRepo.findByDocenteUsername(username).stream()
+                .filter(Seccion::isActiva)
+                .map(SeccionResponse::from)
+                .toList();
+    }
+
     public SeccionResponse obtener(Long id) {
         return seccionRepo.findById(id)
                 .map(SeccionResponse::from)

@@ -29,6 +29,8 @@
         <module>GestionEstudiantes</module>
         <module>GestionAcademica</module>
         <module>ObservacionesSeguimiento</module>
+        <module>TallerExtracurricular</module>
+        <module>CalendarioEventos</module>
     </modules>
 
     

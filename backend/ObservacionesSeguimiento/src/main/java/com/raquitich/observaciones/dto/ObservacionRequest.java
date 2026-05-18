@@ -1,14 +1,13 @@
 package com.raquitich.observaciones.dto;
 
-import java.time.LocalDate;
-
 public class ObservacionRequest {
 
     private String estudianteUsername;
     private String tipo;
     private String titulo;
     private String contenido;
-    private LocalDate fechaObservacion;
+    /** Fecha opcional en formato YYYY-MM-DD (o null) */
+    private String fechaObservacion;
 
     public String getEstudianteUsername() { return estudianteUsername; }
     public void setEstudianteUsername(String estudianteUsername) { this.estudianteUsername = estudianteUsername; }
@@ -22,6 +21,6 @@ public class ObservacionRequest {
     public String getContenido() { return contenido; }
     public void setContenido(String contenido) { this.contenido = contenido; }
 
-    public LocalDate getFechaObservacion() { return fechaObservacion; }
-    public void setFechaObservacion(LocalDate fechaObservacion) { this.fechaObservacion = fechaObservacion; }
+    public String getFechaObservacion() { return fechaObservacion; }
+    public void setFechaObservacion(String fechaObservacion) { this.fechaObservacion = fechaObservacion; }
 }
