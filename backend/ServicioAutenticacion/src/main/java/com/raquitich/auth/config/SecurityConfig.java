@@ -57,11 +57,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/login",
+                                "/auth/register",
                                 "/actuator/health",
                                 "/internal/**"   // protegido por API key interna, no JWT
                         ).permitAll()
-
-                        .requestMatchers("/auth/register").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

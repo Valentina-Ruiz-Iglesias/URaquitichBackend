@@ -12,19 +12,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ServicioAutenticacion</artifactId>
-    <name>ServicioAutenticacion</name>
-    <description>Microservicio de autenticacion y autorizacion</description>
+    <artifactId>TallerExtracurricular</artifactId>
+    <name>TallerExtracurricular</name>
+    <description>Microservicio de Talleres Extracurriculares - Universidad Raquitich</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <dependency>
@@ -48,22 +43,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Lombok debe declararse explícitamente en el módulo hijo para que
+             el compilador lo descubra como annotation processor -->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-api</artifactId>
-            <version>0.12.7</version>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-impl</artifactId>
-            <version>0.12.7</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.7</version>
-            <scope>runtime</scope>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -75,6 +60,7 @@
 
     <build>
         <plugins>
+            <!-- Registra Lombok como annotation processor explícitamente -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

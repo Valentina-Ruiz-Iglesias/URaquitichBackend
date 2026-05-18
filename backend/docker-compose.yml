@@ -52,6 +52,19 @@ services:
       - pg_data_observaciones:/var/lib/postgresql/data
     restart: always
 
+  postgres-talleres:
+    image: postgres:15-alpine
+    container_name: postgres-talleres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: talleres_db
+    ports:
+      - "5437:5432"
+    volumes:
+      - pg_data_talleres:/var/lib/postgresql/data
+    restart: always
+
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin-ui
@@ -65,6 +78,7 @@ services:
       - postgres-estudiantes
       - postgres-academica
       - postgres-observaciones
+      - postgres-talleres
     restart: always
 
 volumes:
@@ -72,3 +86,4 @@ volumes:
   pg_data_estudiantes:
   pg_data_academica:
   pg_data_observaciones:
+  pg_data_talleres:

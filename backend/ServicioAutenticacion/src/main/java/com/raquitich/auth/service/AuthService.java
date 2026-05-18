@@ -70,7 +70,7 @@ public class AuthService {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
 
-        return new AuthResponse(token, user.getUsername(), userRole.getName().name());
+        return new AuthResponse(token, user.getUsername(), user.getNombre(), userRole.getName().name());
     }
 
     /**
@@ -129,6 +129,6 @@ public class AuthService {
                 .map(r -> r.getName().name())
                 .orElse("ROLE_ESTUDIANTE");
 
-        return new AuthResponse(token, user.getUsername(), role);
+        return new AuthResponse(token, user.getUsername(), user.getNombre(), role);
     }
 }
