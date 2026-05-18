@@ -1,9 +1,12 @@
 package com.raquitich.auth.service;
 
+import com.raquitich.auth.dto.AdminCreateUserRequest;
 import com.raquitich.auth.dto.AuthResponse;
+import com.raquitich.auth.dto.ChangeRoleRequest;
 import com.raquitich.auth.dto.InternalCreateUserRequest;
 import com.raquitich.auth.dto.LoginRequest;
 import com.raquitich.auth.dto.RegisterRequest;
+import com.raquitich.auth.dto.UserResponse;
 import com.raquitich.auth.model.Role;
 import com.raquitich.auth.model.RoleName;
 import com.raquitich.auth.model.User;
@@ -14,7 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -70,7 +75,7 @@ public class AuthService {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(user.getUsername());
         String token = jwtService.generateToken(userDetails);
 
-        return new AuthResponse(token, user.getUsername(), userRole.getName().name());
+        return new AuthResponse(token, user.getUsername(), user.getNombre(), userRole.getName().name());
     }
 
     /**
@@ -109,6 +114,71 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    // ── Admin: gestión de usuarios ─────────────────────────────────────────
+
+    public List<UserResponse> listarUsuarios() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserResponse::from)
+                .toList();
+    }
+
+    @Transactional
+    public UserResponse crearUsuarioAdmin(AdminCreateUserRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("El username ya está en uso");
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("El email ya está en uso");
+        }
+
+        RoleName roleName = resolveRole(request.getRole());
+        Role role = roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
+
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setNombre(request.getNombre() != null ? request.getNombre() : request.getUsername());
+        user.setPassword(passwordEncoder.encode(
+                request.getPassword() != null ? request.getPassword() : "Raquitich2024!"));
+        user.setEnabled(true);
+        user.setRoles(Set.of(role));
+
+        return UserResponse.from(userRepository.save(user));
+    }
+
+    @Transactional
+    public UserResponse cambiarRol(Long id, ChangeRoleRequest request) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        RoleName roleName = resolveRole(request.getRole());
+        Role role = roleRepository.findByName(roleName)
+                .orElseGet(() -> roleRepository.save(new Role(roleName)));
+
+        user.setRoles(Set.of(role));
+        return UserResponse.from(userRepository.save(user));
+    }
+
+    @Transactional
+    public UserResponse cambiarEstado(Long id, boolean enabled) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        user.setEnabled(enabled);
+        return UserResponse.from(userRepository.save(user));
+    }
+
+    private RoleName resolveRole(String roleStr) {
+        if (roleStr == null || roleStr.isBlank()) return RoleName.ROLE_ESTUDIANTE;
+        // Solo se permiten los 3 roles del sistema
+        return switch (roleStr) {
+            case "ROLE_DOCENTE"    -> RoleName.ROLE_DOCENTE;
+            case "ROLE_DIRECTIVO"  -> RoleName.ROLE_DIRECTIVO;
+            default                -> RoleName.ROLE_ESTUDIANTE;
+        };
+    }
+
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -129,6 +199,6 @@ public class AuthService {
                 .map(r -> r.getName().name())
                 .orElse("ROLE_ESTUDIANTE");
 
-        return new AuthResponse(token, user.getUsername(), role);
+        return new AuthResponse(token, user.getUsername(), user.getNombre(), role);
     }
 }

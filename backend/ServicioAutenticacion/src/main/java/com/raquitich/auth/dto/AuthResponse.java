@@ -5,46 +5,31 @@ public class AuthResponse {
     private String token;
     private String type = "Bearer";
     private String username;
+    private String nombre;
     private String role;
 
     public AuthResponse() {
     }
 
-    public AuthResponse(String token, String username, String role) {
-        this.token = token;
+    public AuthResponse(String token, String username, String nombre, String role) {
+        this.token    = token;
         this.username = username;
-        this.role = role;
+        this.nombre   = nombre;
+        this.role     = role;
     }
 
-    public String getToken() {
-        return token;
-    }
+    public String getToken()    { return token; }
+    public void setToken(String token) { this.token = token; }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+    public String getType()     { return type; }
+    public void setType(String type)   { this.type = type; }
 
-    public String getType() {
-        return type;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    public String getNombre()   { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    public String getRole()     { return role; }
+    public void setRole(String role)   { this.role = role; }
 }
