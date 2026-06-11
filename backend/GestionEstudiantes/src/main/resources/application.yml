@@ -1,4 +1,4 @@
-server:
+﻿server:
   port: 8082
 
 spring:
@@ -6,9 +6,9 @@ spring:
     name: gestion-estudiantes
 
   datasource:
-    url: jdbc:postgresql://localhost:5434/db_estudiantes
+    url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/db_estudiantes?sslmode=require
     username: postgres
-    password: 1234
+    password: Raquitich.2026
     driver-class-name: org.postgresql.Driver
 
   jpa:

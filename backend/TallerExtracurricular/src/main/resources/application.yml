@@ -1,4 +1,4 @@
-server:
+﻿server:
   port: 8085
 
 spring:
@@ -6,9 +6,9 @@ spring:
     name: taller-extracurricular
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5437}/${DB_NAME:talleres_db}
-    username: ${DB_USER:postgres}
-    password: ${DB_PASSWORD:postgres}
+    url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/talleres_db?sslmode=require
+    username: postgres
+    password: Raquitich.2026
     driver-class-name: org.postgresql.Driver
 
   jpa:

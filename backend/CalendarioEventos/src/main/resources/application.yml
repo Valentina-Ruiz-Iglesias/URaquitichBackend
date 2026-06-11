@@ -1,13 +1,13 @@
-server:
-  port: 8085
+﻿server:
+  port: 8086
 
 spring:
   application:
     name: CalendarioEventos
   datasource:
-    url: jdbc:postgresql://localhost:5437/db_calendario
+    url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/db_calendario?sslmode=require
     username: postgres
-    password: 1234
+    password: Raquitich.2026
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
