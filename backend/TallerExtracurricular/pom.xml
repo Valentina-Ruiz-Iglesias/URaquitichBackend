@@ -43,8 +43,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Lombok debe declararse explícitamente en el módulo hijo para que
-             el compilador lo descubra como annotation processor -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -56,11 +54,16 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.8.4</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Registra Lombok como annotation processor explícitamente -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/secciones")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
-public class SeccionController {
+public class SeccionController implements BaseController<SeccionRequest, SeccionRequest, SeccionResponse, Long> {
 
     private final SeccionService service;
 
@@ -22,17 +22,45 @@ public class SeccionController {
         this.service = service;
     }
 
-    // ── Secciones ──────────────────────────────────────────────────────────────
+    // ── Secciones (Métodos del BaseController) ─────────────────────────────────
 
+    @Override
     @GetMapping
-    public ResponseEntity<List<SeccionResponse>> listar() {
+    public ResponseEntity<List<SeccionResponse>> getAll() {
         return ResponseEntity.ok(service.listar());
     }
 
+    @Override
     @GetMapping("/{id}")
-    public ResponseEntity<SeccionResponse> obtener(@PathVariable Long id) {
+    public ResponseEntity<SeccionResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.obtener(id));
     }
+
+    @Override
+    @PostMapping
+    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO')")
+    public ResponseEntity<SeccionResponse> save(@Valid @RequestBody SeccionRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.crear(request));
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO')")
+    public ResponseEntity<SeccionResponse> update(
+            @PathVariable Long id,
+            @RequestBody SeccionRequest request) {
+        return ResponseEntity.ok(service.actualizar(id, request));
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.desactivar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ── Métodos Específicos (No están en el BaseController) ───────────────────
 
     /** Secciones en las que el estudiante autenticado está inscrito */
     @GetMapping("/mis-secciones")
@@ -48,27 +76,6 @@ public class SeccionController {
     public ResponseEntity<List<SeccionResponse>> misSeccionesDocente(Authentication authentication) {
         String username = authentication.getName();
         return ResponseEntity.ok(service.seccionesDelDocente(username));
-    }
-
-    @PostMapping
-    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO')")
-    public ResponseEntity<SeccionResponse> crear(@Valid @RequestBody SeccionRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.crear(request));
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO')")
-    public ResponseEntity<SeccionResponse> actualizar(
-            @PathVariable Long id,
-            @RequestBody SeccionRequest request) {
-        return ResponseEntity.ok(service.actualizar(id, request));
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO')")
-    public ResponseEntity<Void> desactivar(@PathVariable Long id) {
-        service.desactivar(id);
-        return ResponseEntity.noContent().build();
     }
 
     // ── Horarios ───────────────────────────────────────────────────────────────

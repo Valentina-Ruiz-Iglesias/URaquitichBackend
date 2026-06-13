@@ -32,7 +32,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
+           .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/v3/api-docs/**", // <-- EL PASE VIP PARA SWAGGER
+                    "/swagger-ui/**"   // <-- EL PASE VIP PARA SWAGGER
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

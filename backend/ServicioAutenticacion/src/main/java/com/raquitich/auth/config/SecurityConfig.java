@@ -62,7 +62,9 @@ public class SecurityConfig {
                                 "/auth/login",
                                 "/auth/register",
                                 "/actuator/health",
-                                "/internal/**"   // protegido por API key interna, no JWT
+                                "/internal/**",   // protegido por API key interna, no JWT
+                                "/v3/api-docs/**", // <-- AGREGADO PARA SWAGGER
+                                "/swagger-ui/**"   // <-- AGREGADO PARA SWAGGER
                         ).permitAll()
 
                         .anyRequest().authenticated()

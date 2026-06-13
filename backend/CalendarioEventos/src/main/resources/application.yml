@@ -5,9 +5,13 @@ spring:
   application:
     name: CalendarioEventos
   datasource:
-    url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/db_calendario?sslmode=require
+    #url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/db_calendario?sslmode=require
+    #username: postgres
+    #password: Raquitich.2026
+    #driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5437/db_calendario
     username: postgres
-    password: Raquitich.2026
+    password: 1234
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/estudiantes")
 @CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
-public class EstudianteController {
+public class EstudianteController implements BaseController<EstudianteRequest, EstudianteUpdateRequest, EstudianteResponse, Long> {
 
     private final EstudianteService estudianteService;
 
@@ -37,9 +37,10 @@ public class EstudianteController {
      * Solo pueden hacerlo DIRECTIVO y ADMIN.
      * Retorna HTTP 201 Created con los datos del estudiante creado.
      */
+    @Override
     @PostMapping
     @PreAuthorize("hasAnyRole('DIRECTIVO', 'ADMIN')")
-    public ResponseEntity<EstudianteResponse> crear(@Valid @RequestBody EstudianteRequest request) {
+    public ResponseEntity<EstudianteResponse> save(@Valid @RequestBody EstudianteRequest request) {
         EstudianteResponse response = estudianteService.crearEstudiante(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -49,9 +50,10 @@ public class EstudianteController {
      * Lista todos los estudiantes activos.
      * Pueden verlo DIRECTIVO, ADMIN y DOCENTE (pero el docente no puede editar).
      */
+    @Override
     @GetMapping
     @PreAuthorize("hasAnyRole('DIRECTIVO', 'ADMIN', 'DOCENTE')")
-    public ResponseEntity<List<EstudianteResponse>> listar() {
+    public ResponseEntity<List<EstudianteResponse>> getAll() {
         return ResponseEntity.ok(estudianteService.listarEstudiantes());
     }
 
@@ -76,9 +78,10 @@ public class EstudianteController {
      * Obtiene un estudiante específico por su ID.
      * Solo para DIRECTIVO, ADMIN y DOCENTE.
      */
+    @Override
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('DIRECTIVO', 'ADMIN', 'DOCENTE')")
-    public ResponseEntity<EstudianteResponse> obtener(@PathVariable Long id) {
+    public ResponseEntity<EstudianteResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(estudianteService.obtenerPorId(id));
     }
 
@@ -88,9 +91,10 @@ public class EstudianteController {
      * Solo DIRECTIVO y ADMIN pueden editar.
      * No cambia username, email ni contraseña (esos viven en ServicioAutenticacion).
      */
+    @Override
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('DIRECTIVO', 'ADMIN')")
-    public ResponseEntity<EstudianteResponse> actualizar(
+    public ResponseEntity<EstudianteResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody EstudianteUpdateRequest request) {
         return ResponseEntity.ok(estudianteService.actualizarEstudiante(id, request));
@@ -101,9 +105,11 @@ public class EstudianteController {
      * Desactiva un estudiante (borrado suave — no elimina de la BD).
      * Solo DIRECTIVO y ADMIN pueden hacerlo.
      */
+    @Override
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('DIRECTIVO', 'ADMIN')")
-    public ResponseEntity<EstudianteResponse> desactivar(@PathVariable Long id) {
-        return ResponseEntity.ok(estudianteService.desactivarEstudiante(id));
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        estudianteService.desactivarEstudiante(id);
+        return ResponseEntity.noContent().build();
     }
 }
