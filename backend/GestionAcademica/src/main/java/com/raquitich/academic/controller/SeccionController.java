@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/secciones")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class SeccionController implements BaseController<SeccionRequest, SeccionRequest, SeccionResponse, Long> {
 
     private final SeccionService service;

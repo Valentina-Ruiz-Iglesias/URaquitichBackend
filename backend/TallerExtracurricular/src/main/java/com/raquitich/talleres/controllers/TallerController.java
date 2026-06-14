@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/talleres")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class TallerController implements BaseController<TallerRequestDTO, TallerResponseDTO, Long> {
 
     private final TallerService tallerService;

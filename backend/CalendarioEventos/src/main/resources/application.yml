@@ -17,8 +17,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-jwt:
-  secret: cmFxdWl0aWNoX3N1cGVyX3NlY3JldF9rZXlfand0XzIwMjZfcmFxdWl0aWNoX2JhY2tlbmQ=
+app:
+  jwt:
+    secret: cmFxdWl0aWNoX3N1cGVyX3NlY3JldF9rZXlfand0XzIwMjZfcmFxdWl0aWNoX2JhY2tlbmQ=
 
 logging:
   level:

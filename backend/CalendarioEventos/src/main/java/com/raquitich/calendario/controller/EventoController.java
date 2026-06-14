@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/eventos")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class EventoController {
 
     private final EventoService service;
@@ -26,7 +26,6 @@ public class EventoController {
         this.jwtService = jwtService;
     }
 
-    /** Lista todos los eventos visibles para el usuario autenticado */
     @GetMapping
     public ResponseEntity<List<EventoResponse>> listar(Authentication auth,
                                                        HttpServletRequest request) {
@@ -34,35 +33,24 @@ public class EventoController {
         return ResponseEntity.ok(service.listar(auth.getName(), role));
     }
 
-    /** Solo directivos crean eventos institucionales (visibles a todos) */
     @PostMapping("/institucional")
+    @PreAuthorize("hasAnyRole('DIRECTIVO', 'ADMIN')")
     public ResponseEntity<EventoResponse> crearInstitucional(
             @Valid @RequestBody EventoRequest req,
-            Authentication auth,
-            HttpServletRequest request) {
-        String role = extractRole(request);
-        if (!"ROLE_DIRECTIVO".equals(role) && !"ROLE_ADMIN".equals(role)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+            Authentication auth) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(service.crearInstitucional(req, auth.getName()));
     }
 
-    /** Docentes crean eventos públicos visibles para todos (avisos de sección) */
     @PostMapping("/publico")
+    @PreAuthorize("hasAnyRole('DOCENTE', 'DIRECTIVO', 'ADMIN')")
     public ResponseEntity<EventoResponse> crearPublico(
             @Valid @RequestBody EventoRequest req,
-            Authentication auth,
-            HttpServletRequest request) {
-        String role = extractRole(request);
-        if (!"ROLE_DOCENTE".equals(role) && !"ROLE_DIRECTIVO".equals(role) && !"ROLE_ADMIN".equals(role)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+            Authentication auth) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(service.crearPublico(req, auth.getName()));
     }
 
-    /** Cualquier usuario autenticado puede crear un evento personal */
     @PostMapping("/personal")
     public ResponseEntity<EventoResponse> crearPersonal(
             @Valid @RequestBody EventoRequest req,

@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/observaciones")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class ObservacionController {
 
     private final ObservacionService service;

@@ -22,7 +22,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/estudiantes")
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:3000"})
 public class EstudianteController implements BaseController<EstudianteRequest, EstudianteUpdateRequest, EstudianteResponse, Long> {
 
     private final EstudianteService estudianteService;
