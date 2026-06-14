@@ -6,13 +6,9 @@ spring:
     name: taller-extracurricular
 
   datasource:
-    # url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/talleres_db?sslmode=require
-    # username: postgres
-    # password: Raquitich.2026
-    
-    url: jdbc:postgresql://localhost:5437/talleres_db
+    url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/talleres_db?sslmode=require
     username: postgres
-    password: postgres
+    password: Raquitich.2026
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

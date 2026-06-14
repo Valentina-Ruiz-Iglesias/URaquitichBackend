@@ -6,13 +6,9 @@ spring:
     name: servicio-autenticacion
 
   datasource:
-    #url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/db_autenticacion?sslmode=require
-    #username: postgres
-    #password: Raquitich.2026
-    #driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/db_autenticacion
+    url: jdbc:postgresql://database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432/db_autenticacion?sslmode=require
     username: postgres
-    password: 1234
+    password: Raquitich.2026
     driver-class-name: org.postgresql.Driver
 
   jpa:
