@@ -1,0 +1,31 @@
+MICROSERVICIOS PUBLICADOS - Universidad Raquitich
+==================================================
+
+Frontend (Angular + Nginx):
+  http://98.93.34.190
+
+Microservicios Backend (AWS EC2 - us-east-1a):
+  http://54.235.3.218:8081  →  Servicio Autenticacion
+  http://54.235.3.218:8082  →  Gestion Estudiantes
+  http://54.235.3.218:8083  →  Gestion Academica
+  http://54.235.3.218:8084  →  Observaciones Seguimiento
+  http://54.235.3.218:8085  →  Taller Extracurricular
+  http://54.235.3.218:8086  →  Calendario Eventos
+
+Swagger UI (documentacion de endpoints):
+  http://54.235.3.218:8081/swagger-ui/index.html  →  Servicio Autenticacion
+  http://54.235.3.218:8082/swagger-ui/index.html  →  Gestion Estudiantes
+  http://54.235.3.218:8083/swagger-ui/index.html  →  Gestion Academica
+  http://54.235.3.218:8084/swagger-ui/index.html  →  Observaciones Seguimiento
+  http://54.235.3.218:8085/swagger-ui/index.html  →  Taller Extracurricular
+  http://54.235.3.218:8086/swagger-ui/index.html  →  Calendario Eventos
+
+Base de Datos:
+  AWS RDS PostgreSQL - database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432
+  Bases de datos: db_autenticacion, db_estudiantes, db_academica,
+                  db_observaciones, db_talleres, db_calendario
+
+Infraestructura:
+  EC2 Backend: t3.small - us-east-1a
+  EC2 Frontend: t3.micro - us-east-1a
+  RDS: PostgreSQL - us-east-1a
