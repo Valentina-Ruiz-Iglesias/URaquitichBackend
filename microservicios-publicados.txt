@@ -1,24 +1,23 @@
 MICROSERVICIOS PUBLICADOS - Universidad Raquitich
-==================================================
 
 Frontend (Angular + Nginx):
-  http://98.93.34.190
+  http://54.90.70.83
 
 Microservicios Backend (AWS EC2 - us-east-1a):
-  http://54.235.3.218:8081  →  Servicio Autenticacion
-  http://54.235.3.218:8082  →  Gestion Estudiantes
-  http://54.235.3.218:8083  →  Gestion Academica
-  http://54.235.3.218:8084  →  Observaciones Seguimiento
-  http://54.235.3.218:8085  →  Taller Extracurricular
-  http://54.235.3.218:8086  →  Calendario Eventos
+  http://18.209.5.227:8081  →  Servicio Autenticacion
+  http://18.209.5.227:8082  →  Gestion Estudiantes
+  http://18.209.5.227:8083  →  Gestion Academica
+  http://18.209.5.227:8084  →  Observaciones Seguimiento
+  http://18.209.5.227:8085  →  Taller Extracurricular
+  http://18.209.5.227:8086  →  Calendario Eventos
 
 Swagger UI (documentacion de endpoints):
-  http://54.235.3.218:8081/swagger-ui/index.html  →  Servicio Autenticacion
-  http://54.235.3.218:8082/swagger-ui/index.html  →  Gestion Estudiantes
-  http://54.235.3.218:8083/swagger-ui/index.html  →  Gestion Academica
-  http://54.235.3.218:8084/swagger-ui/index.html  →  Observaciones Seguimiento
-  http://54.235.3.218:8085/swagger-ui/index.html  →  Taller Extracurricular
-  http://54.235.3.218:8086/swagger-ui/index.html  →  Calendario Eventos
+  http://18.209.5.227:8081/swagger-ui/index.html  →  Servicio Autenticacion
+  http://18.209.5.227:8082/swagger-ui/index.html  →  Gestion Estudiantes
+  http://18.209.5.227:8083/swagger-ui/index.html  →  Gestion Academica
+  http://18.209.5.227:8084/swagger-ui/index.html  →  Observaciones Seguimiento
+  http://18.209.5.227:8085/swagger-ui/index.html  →  Taller Extracurricular
+  http://18.209.5.227:8086/swagger-ui/index.html  →  Calendario Eventos
 
 Base de Datos:
   AWS RDS PostgreSQL - database-raquitich.cbdllehc2ios.us-east-1.rds.amazonaws.com:5432
